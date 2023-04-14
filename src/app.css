@@ -1,5 +1,5 @@
+/* 리셋 css */
 @import url(./styles/reset.css);
 
-body {
-  background-color: blue;
-}
+/* style css */
+@import url(./styles/style.css);

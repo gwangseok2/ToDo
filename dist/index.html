@@ -8,6 +8,35 @@
   <title>Document</title>
 <script defer src="main.js"></script></head>
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <div class="todo-list">
+      <h1 class="todo-list-title">NHN frontend</h1>
+      <main class="todo-list-wrapper">
+        <input class="todo-list-input" type="text" placeholder="What needs to be done?">
+        <ul class="todo-list-contents">
+          <li class="todo-list-item">3</li>
+          <li class="todo-list-item">2</li>
+          <li class="todo-list-item">1</li>
+        </ul>
+        <ul class="todo-list-info">
+          <li class="todo-list-state">
+            <span class="todo-list-counter">0</span>
+            <span>items left</span>
+          </li>
+          <li class="todo-list-buttons">
+            <button class="active" type="button">All</button>
+            <button type="button">Active</button>
+            <button type="button">Completed</button>
+          </li>
+          <li class="todo-list-clear">
+            <button type="button">
+              <span>Clear Completed</span>
+              <span class="todo-list-clear-counter">(0)</span>
+            </button>
+          </li>
+        </ul>
+      </main>
+    </div>
+  </div>
 </body>
 </html>
