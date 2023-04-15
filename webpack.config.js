@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
+	devtool: 'cheap-eval-source-map',
 	entry: {
 		main: './src/index.js',
 	},

@@ -7,6 +7,7 @@ button {
   background-color: #f1f1f1;
   width: 100%;
   min-height: 100vh;
+  padding-bottom: 40px;
 }
 
 .todo-list-title {
@@ -47,12 +48,29 @@ button {
 }
 
 .todo-list-contents .todo-list-item {
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid #ccc;
   color: #000;
   font-size: 12px;
-  padding: 7px 10px;
+  padding: 10px 7px 10px 0px;
   width: 100%;
   cursor: pointer;
+}
+
+.todo-list-contents .todo-list-item.move {
+  position: absolute;
+  z-index: 999;
+  border-bottom: none;
+}
+
+.todo-list-contents .todo-list-item span {
+  margin-right: 5px;
+}
+
+.todo-list-contents .todo-list-item.active {
+  /* text-decoration: line-through; */
+  color: #ccc;
 }
 
 /* ========= 하단 정보부 ========= */
