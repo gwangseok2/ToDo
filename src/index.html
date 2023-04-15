@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NHN frontend</title>
-  <link href="./app.css" rel="stylesheet">
+  <!-- <link href="./app.css" rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -15,8 +15,8 @@
     <div class="todo-list">
       <h1 class="todo-list-title">NHN frontend</h1>
       <main class="todo-list-wrapper">
-        <input class="todo-list-input" onkeypress="createTodo(event)" type="text" placeholder="What needs to be done?">
-        <ul class="todo-list-contents"></ul>
+        <input class="todo-list-input" type="text" placeholder="What needs to be done?">
+        <ul class="todo-list-contents" dropzone="true"></ul>
         </ul>
         <ul class="todo-list-info">
           <li class="todo-list-state">
@@ -24,12 +24,12 @@
             <span>items left</span>
           </li>
           <li class="todo-list-buttons">
-            <button class="active" onclick="listFilter('all',event)" type="button">All</button>
-            <button class="active-button" type="button" onclick="listFilter('active',event)">Active</button>
-            <button class="completed-button" type="button" onclick="listFilter('completed',event)">Completed</button>
+            <button class="active all" type="button">All</button>
+            <button class="active-button" type="button">Active</button>
+            <button class="completed-button" type="button">Completed</button>
           </li>
           <li class="todo-list-clear">
-            <button type="button" onclick="clearTodo()">
+            <button type="button">
               <span>Clear Completed</span>
               <span class="todo-list-clear-counter">(0)</span>
             </button>
@@ -38,7 +38,6 @@
       </main>
     </div>
   </div>
-  <script type="text/javascript" src="./index.js"></script>
 </body>
 
 </html>

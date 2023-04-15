@@ -8,6 +8,6 @@ module.exports = {
   plugins: ["prettier"],
   rules: {
     "no-console": "off",
-
+    "no-tabs": "off",
   },
 };
