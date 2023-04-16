@@ -77,7 +77,7 @@ button {
   margin-right: 5px;
 }
 
-.todo-list-contents .todo-list-item.active {
+.todo-list-contents .todo-list-item.complete {
   /* text-decoration: line-through; */
   color: #ccc;
 }
@@ -105,4 +105,5 @@ button {
 .todo-list-buttons button.active {
   color: #eb4656;
   font-weight: 500;
+  border: 1px solid #eb4656;
 }
