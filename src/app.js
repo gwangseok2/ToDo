@@ -13,19 +13,12 @@ let check = true;
 let upIndex = null;
 let downIndex = null;
 
-const delay = (ms) => {
-  setTimeout(() => {
-    console.log('hi');
-  }, ms);
-};
-
 // createTodo
 $input.addEventListener('keypress', (e) => {
   if (e.keyCode === 13 && e.target.value) {
     createTodo(e);
   }
 });
-// input enter
 
 class TodoItem {
   constructor(
@@ -126,12 +119,12 @@ const createTodo = (e) => {
   render();
 };
 
-$todoListContents.addEventListener('mousedown', contentsActiveEvent);
-$todoListContents.addEventListener('mouseup', mouseUpTestEvent);
+$todoListContents.addEventListener('mousedown', mouseDownEvent);
+$todoListContents.addEventListener('mouseup', mouseUpEvent);
 
 // 투두리스트 눌렀을 때 발생하는 이벤트 mousedown
-function contentsActiveEvent(e) {
-  downTimeStamp = event.timeStamp;
+function mouseDownEvent(e) {
+  downTimeStamp = e.timeStamp;
   if (
     e.target.tagName === 'SPAN' &&
     !e.target.parentNode.parentNode.classList.contains('complete')
@@ -146,10 +139,10 @@ function contentsActiveEvent(e) {
 }
 
 // 이벤트 mouseup
-function mouseUpTestEvent(e) {
+function mouseUpEvent(e) {
   upTimeStamp = e.timeStamp;
   $todoListContents.classList.remove('hover');
-  //  0.8초 미만으로 누르고 li태그 클릭시만 적용하는 코드
+
   if (upTimeStamp - downTimeStamp < 800 && e.target.tagName === 'LI' && check) {
     const targetId = e.target.id;
     const totalArray = [...progressArray, ...completeArray];

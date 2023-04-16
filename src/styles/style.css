@@ -88,7 +88,23 @@ button {
 .todo-list-contents .todo-list-item.complete {
   /* text-decoration: line-through; */
   color: #ccc;
+  position: relative;
 }
+
+.todo-list-contents .todo-list-item.complete::after {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-image: url('https://w7.pngwing.com/pngs/976/878/png-transparent-black-check-illustration-black-and-white-pattern-black-checkmark-angle-white-sport.png');
+}
+
 
 
 /* ========= 하단 정보부 ========= */
