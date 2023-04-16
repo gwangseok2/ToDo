@@ -152,7 +152,6 @@ function mouseUpEvent(e) {
       if (el.id === Number(targetId)) {
         if (el.status === 'progress') {
           el.completeItem();
-          console.log(idx, 'index');
           progressArray.splice(idx, 1);
           completeArray.push(el);
         } else {
