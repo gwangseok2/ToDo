@@ -136,6 +136,7 @@ function contentsActiveEvent(e) {
     e.target.tagName === 'SPAN' &&
     !e.target.parentNode.parentNode.classList.contains('complete')
   ) {
+    $todoListContents.classList.add('hover');
     check = false;
     dragEvent(e);
     $todoListContents.addEventListener('mouseleave', mouseOutTestEvent);
@@ -147,7 +148,7 @@ function contentsActiveEvent(e) {
 // 이벤트 mouseup
 function mouseUpTestEvent(e) {
   upTimeStamp = e.timeStamp;
-
+  $todoListContents.classList.remove('hover');
   //  0.8초 미만으로 누르고 li태그 클릭시만 적용하는 코드
   if (upTimeStamp - downTimeStamp < 800 && e.target.tagName === 'LI' && check) {
     const targetId = e.target.id;
@@ -245,4 +246,5 @@ function clearAbsolute() {
   moveTarget.style.left = '';
   moveTarget.style.top = '';
   moveTarget.classList.remove('move');
+  $todoListContents.classList.remove('hover');
 }

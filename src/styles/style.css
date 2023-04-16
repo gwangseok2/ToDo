@@ -69,6 +69,10 @@ button {
   z-index: 999;
 }
 
+.todo-list-contents.hover .todo-list-item:hover {
+  border-left: 3px solid #1f80fd;
+}
+
 .todo-list-contents .todo-list-item.move {
   border-bottom: none;
 }
