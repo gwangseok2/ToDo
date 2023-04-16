@@ -9,6 +9,11 @@ let upTimeStamp = null;
 let itemId = 0;
 let picked = null;
 let pickedIndex = null;
+let moveTarget = null;
+let moveTargetId = null;
+let check = true;
+let sortArrKey = null;
+let downIndex = null;
 
 const delay = (ms) => {
   setTimeout(() => {
@@ -53,7 +58,7 @@ class TodoItem {
 }
 
 // 랜더 함수
-const render = () => {
+const render = (type) => {
   let items;
   const $buttons = document.querySelectorAll('.todo-list-buttons > button');
 
@@ -69,15 +74,27 @@ const render = () => {
     items = [...completeArray];
   }
 
-  items.sort((a, b) => {
-    if (a.key < b.key && a.status === 'progress' && b.status === 'progress') {
-      return 1;
-    }
-    if (a.key > b.key && a.status === 'progress' && b.status === 'progress') {
-      return -1;
-    }
-    return 0;
-  });
+  if (type === 'change') {
+    items.sort((a, b) => {
+      if (a.key < b.key && a.status === 'progress' && b.status === 'progress') {
+        return 1;
+      }
+      if (a.key > b.key && a.status === 'progress' && b.status === 'progress') {
+        return -1;
+      }
+      return 0;
+    });
+  } else {
+    items.sort((a, b) => {
+      if (a.id < b.id && a.status === 'progress' && b.status === 'progress') {
+        return 1;
+      }
+      if (a.id > b.id && a.status === 'progress' && b.status === 'progress') {
+        return -1;
+      }
+      return 0;
+    });
+  }
 
   // 하단 정보부 버튼 카운트 관리
   $clearButton.children[1].innerText = `(${completeArray.length})`;
@@ -103,8 +120,6 @@ const render = () => {
 // 랜더 함수 끝
 
 const createTodo = (e) => {
-  const $todoListItems = document.querySelectorAll('.todo-list-item');
-  const $todoListCounter = document.querySelector('.todo-list-counter');
   const item = new TodoItem(itemId++, e.target.value, new Date().getTime());
   progressArray.length > 0
     ? progressArray.unshift(item)
@@ -118,25 +133,31 @@ const createTodo = (e) => {
 };
 
 $todoListContents.addEventListener('mousedown', contentsActiveEvent);
+$todoListContents.addEventListener('mouseup', mouseUpTestEvent);
 
 // 투두리스트 눌렀을 때 발생하는 이벤트 mousedown
-function contentsActiveEvent(event) {
+function contentsActiveEvent(e) {
   downTimeStamp = event.timeStamp;
-  if (event.target.tagName !== 'LI') {
-    return false;
+  if (e.target.tagName === 'SPAN') {
+    check = false;
+    dragEvent(e);
+    $todoListContents.addEventListener('mouseleave', mouseOutTestEvent);
+    downIndex = [];
+    const clickIndex = e.target.parentNode.parentNode.id;
+    progressArray.map((el, idx) => {
+      if (el.id === Number(clickIndex)) {
+        downIndex.splice(0, 1, idx);
+      }
+    });
   }
 }
 
-$todoListContents.addEventListener('mouseup', mouseUpTestEvent);
-
+// 이벤트 mouseup
 function mouseUpTestEvent(e) {
-  console.log(downTimeStamp, 'asdsa', e.timeStamp);
   upTimeStamp = e.timeStamp;
-  if (upTimeStamp - downTimeStamp > 800) {
-    //2초이상 눌렸을 때 코드 실행
-    console.log('0.8초이상');
-    // 떳어 들어 올렸어 여기 밑에 요소 인덱스 체크해
-  } else {
+
+  //  0.8초 미만으로 누르고 li태그 클릭시만 적용하는 코드
+  if (upTimeStamp - downTimeStamp < 800 && e.target.tagName === 'LI' && check) {
     console.log('0.8초미만', downTimeStamp);
 
     const targetId = e.target.id;
@@ -158,7 +179,57 @@ function mouseUpTestEvent(e) {
         render();
       }
     });
+  } else {
+    let upId = null;
+    if (e.target.tagName === 'SPAN') {
+      upId = e.target.parentNode.parentNode.id;
+    } else {
+      upId = e.target.id;
+    }
+    const sortArr = [];
+    progressArray.map((el, idx) => {
+      if (el.id === Number(upId)) {
+        sortArr.splice(0, 1, idx);
+      }
+    });
+    const sortArrKey = progressArray[sortArr[0]].key;
+    const downArrkey = progressArray[downIndex[0]].key;
+    progressArray[sortArr[0]].key = downArrkey;
+    progressArray[downIndex[0]].key = sortArrKey;
+    render('change');
   }
+
+  // 그냥 떄면 클리어
+  clearAbsolute();
+  check = true;
+}
+
+function dragEvent(e) {
+  moveTarget = e.target.parentNode;
+  moveTargetId = moveTarget.parentNode.id;
+  moveTarget.classList.add('move');
+
+  $todoListContents.addEventListener('mousemove', moveAt);
+
+  function moveAt(e) {
+    if (e.target.classList.contains('.todo-list-item')) {
+      e.target.classList.add('preview');
+    }
+    moveTarget.style.left = e.pageX - moveTarget.offsetWidth + 'px';
+    moveTarget.style.top = e.pageY - moveTarget.offsetHeight / 2 + 'px';
+  }
+
+  // esc 눌렀 을 때 드래그 취소
+  window.onkeydown = (e) => {
+    if (e.keyCode === 27) {
+      $todoListContents.removeEventListener('mousemove', moveAt);
+      clearAbsolute();
+    }
+  };
+}
+
+function mouseOutTestEvent() {
+  clearAbsolute();
 }
 
 // 하단 정보부 이벤트 리스너
@@ -265,10 +336,10 @@ function clearTodo() {
 //   }
 // }
 
-function clearAbsolute(el) {
-  el.style.position = '';
-  el.style.zIndex = '';
-  el.style.left = '';
-  el.style.top = '';
-  el.classList.remove('move');
+function clearAbsolute() {
+  moveTarget.style.position = '';
+  moveTarget.style.zIndex = '';
+  moveTarget.style.left = '';
+  moveTarget.style.top = '';
+  moveTarget.classList.remove('move');
 }

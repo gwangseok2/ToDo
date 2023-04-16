@@ -73,14 +73,19 @@ button {
   border-bottom: none;
 }
 
+.todo-list-contents .todo-list-item.preview {
+  border-left: 3px solid #1f80fd;
+}
+
 .todo-list-contents .todo-list-item span {
-  margin-right: 5px;
+  padding-right: 5px;
 }
 
 .todo-list-contents .todo-list-item.complete {
   /* text-decoration: line-through; */
   color: #ccc;
 }
+
 
 /* ========= 하단 정보부 ========= */
 .todo-list-info {
