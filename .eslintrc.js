@@ -3,6 +3,7 @@ module.exports = {
   env: {
     node: true,
     es6: true,
+    jest: true,
   },
   extends: ['plugin:prettier/recommended', 'prettier'],
   plugins: ['prettier'],
@@ -17,5 +18,8 @@ module.exports = {
         parser: 'flow',
       },
     ],
+    parserOptions: {
+      sourceType: 'module',
+    },
   },
 };

@@ -117,6 +117,7 @@ const createTodo = (e) => {
     : progressArray.push(item);
   e.target.value = '';
   render();
+  return item;
 };
 
 $todoListContents.addEventListener('mousedown', mouseDownEvent);
