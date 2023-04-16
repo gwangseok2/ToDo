@@ -10,7 +10,7 @@ let itemId = 0;
 let moveTarget = null;
 let moveTargetId = null;
 let check = true;
-let sortArrKey = null;
+let upIndex = null;
 let downIndex = null;
 
 const delay = (ms) => {
@@ -128,6 +128,7 @@ const createTodo = (e) => {
 
 $todoListContents.addEventListener('mousedown', contentsActiveEvent);
 $todoListContents.addEventListener('mouseup', mouseUpTestEvent);
+
 // 투두리스트 눌렀을 때 발생하는 이벤트 mousedown
 function contentsActiveEvent(e) {
   downTimeStamp = event.timeStamp;
@@ -138,13 +139,8 @@ function contentsActiveEvent(e) {
     check = false;
     dragEvent(e);
     $todoListContents.addEventListener('mouseleave', mouseOutTestEvent);
-    downIndex = [];
-    const clickIndex = e.target.parentNode.parentNode.id;
-    progressArray.map((el, idx) => {
-      if (el.id === Number(clickIndex)) {
-        downIndex.splice(0, 1, idx);
-      }
-    });
+    const clickIndex = Number(e.target.parentNode.parentNode.id);
+    downIndex = progressArray.findIndex((x) => x.id === clickIndex);
   }
 }
 
@@ -179,18 +175,11 @@ function mouseUpTestEvent(e) {
     } else {
       upId = e.target.id;
     }
-    const sortArr = [];
-    progressArray.map((el, idx) => {
-      if (el.id === Number(upId)) {
-        sortArr.splice(0, 1, idx);
-      }
-    });
-
-    console.log(progressArray, 'asd', sortArr[0]);
-    const sortArrKey = progressArray[sortArr[0]].key;
-    const downArrkey = progressArray[downIndex[0]].key;
-    progressArray[sortArr[0]].key = downArrkey;
-    progressArray[downIndex[0]].key = sortArrKey;
+    upIndex = progressArray.findIndex((x) => x.id === Number(upId));
+    const sortArrKey = progressArray[upIndex].key;
+    const downArrkey = progressArray[downIndex].key;
+    progressArray[upIndex].key = downArrkey;
+    progressArray[downIndex].key = sortArrKey;
     render('change');
     clearAbsolute();
   }
