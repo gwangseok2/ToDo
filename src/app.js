@@ -7,8 +7,6 @@ const completeArray = [];
 let downTimeStamp = null;
 let upTimeStamp = null;
 let itemId = 0;
-let picked = null;
-let pickedIndex = null;
 let moveTarget = null;
 let moveTargetId = null;
 let check = true;
@@ -126,19 +124,17 @@ const createTodo = (e) => {
     : progressArray.push(item);
   e.target.value = '';
   render();
-
-  // 테스트
-  // const dragSrcEl = document.querySelector('.material-icons');
-  // dragSrcEl.addEventListener('mousedown', handleMouseDown);
 };
 
 $todoListContents.addEventListener('mousedown', contentsActiveEvent);
 $todoListContents.addEventListener('mouseup', mouseUpTestEvent);
-
 // 투두리스트 눌렀을 때 발생하는 이벤트 mousedown
 function contentsActiveEvent(e) {
   downTimeStamp = event.timeStamp;
-  if (e.target.tagName === 'SPAN') {
+  if (
+    e.target.tagName === 'SPAN' &&
+    !e.target.parentNode.parentNode.classList.contains('complete')
+  ) {
     check = false;
     dragEvent(e);
     $todoListContents.addEventListener('mouseleave', mouseOutTestEvent);
@@ -158,8 +154,6 @@ function mouseUpTestEvent(e) {
 
   //  0.8초 미만으로 누르고 li태그 클릭시만 적용하는 코드
   if (upTimeStamp - downTimeStamp < 800 && e.target.tagName === 'LI' && check) {
-    console.log('0.8초미만', downTimeStamp);
-
     const targetId = e.target.id;
     const totalArray = [...progressArray, ...completeArray];
 
@@ -170,7 +164,6 @@ function mouseUpTestEvent(e) {
           console.log(idx, 'index');
           progressArray.splice(idx, 1);
           completeArray.push(el);
-          console.log(progressArray, 'asd', completeArray);
         } else {
           el.cancelItem();
           completeArray.splice(idx - progressArray.length, 1);
@@ -192,15 +185,16 @@ function mouseUpTestEvent(e) {
         sortArr.splice(0, 1, idx);
       }
     });
+
+    console.log(progressArray, 'asd', sortArr[0]);
     const sortArrKey = progressArray[sortArr[0]].key;
     const downArrkey = progressArray[downIndex[0]].key;
     progressArray[sortArr[0]].key = downArrkey;
     progressArray[downIndex[0]].key = sortArrKey;
     render('change');
+    clearAbsolute();
   }
 
-  // 그냥 떄면 클리어
-  clearAbsolute();
   check = true;
 }
 
@@ -255,86 +249,6 @@ function clearTodo() {
     render();
   }
 }
-
-// function handleMouseDown(e) {
-//   e.preventDefault();
-//   picked = e.target.parentNode;
-//   pickedIndex = [...picked.parentNode.parentNode.children].indexOf(
-//     picked.parentNode
-//   );
-//   const el = e.target.parentNode;
-//   el.classList.add('move');
-//   const $area = document.querySelector('.todo-list-wrapper');
-//   const pointerWidthArea =
-//     document.querySelector('.todo-list-wrapper').offsetWidth + 20;
-//   const pointerHeightArea =
-//     document.querySelector('.todo-list-wrapper').offsetHeight + 20;
-
-//   moveAt(e.pageX, e.pageY);
-//   function moveAt(pageX, pageY) {
-//     el.style.left = pageX - el.offsetWidth / 3 + 'px';
-//     el.style.top = pageY - el.offsetHeight / 2 + 'px';
-//   }
-//   function onMouseMove(event) {
-//     if (
-//       parseInt(el.style.left) < (window.innerWidth - pointerWidthArea) / 2 ||
-//       parseInt(el.style.top) < $area.offsetTop ||
-//       parseInt(el.style.top) > pointerHeightArea ||
-//       parseInt(el.style.left) > pointerWidthArea
-//     ) {
-//       clearAbsolute(el);
-//       el.onmouseup = null;
-//       document.removeEventListener('mousemove', onMouseMove);
-//       el.removeEventListener('mouseup', mouseUpEvent);
-//       return false;
-//     }
-//     moveAt(event.pageX, event.pageY);
-//   }
-
-//   document.addEventListener('mousemove', onMouseMove);
-//   const mouseUpEvent = function (event) {
-//     el.style.display = 'none';
-//     const dropZone = document.elementFromPoint(event.clientX, event.clientY);
-//     el.style.display = 'flex';
-//     const index = [
-//       ...dropZone.parentNode.parentNode.parentNode.children,
-//     ].indexOf(dropZone.parentNode.parentNode);
-//     document.removeEventListener('mousemove', onMouseMove);
-//     el.onmouseup = null;
-
-//     // console.log(index, pickedIndex, dropZone.parentNode.parentNode, dropZone);
-//     if (!dropZone.parentNode.classList.contains('todo-list-absolute')) {
-//       clearAbsolute(el);
-//       return false;
-//     }
-
-//     if (index > pickedIndex) {
-//       dropZone.parentNode.parentNode.after(picked.parentNode);
-//     } else {
-//       dropZone.parentNode.parentNode.before(picked.parentNode);
-//     }
-
-//     clearAbsolute(el);
-//     console.log(mouseUpEvent);
-//     el.removeEventListener('mouseup', mouseUpEvent);
-//   };
-//   el.addEventListener('mouseup', mouseUpEvent);
-//   window.onkeydown = (e) => {
-//     if (e.keyCode === 27) {
-//       el.removeEventListener('mouseup', mouseUpEvent);
-//       document.removeEventListener('mousemove', onMouseMove);
-//       clearAbsolute(el);
-//     }
-//   };
-
-//   function clearAbsolute(el) {
-//     el.style.position = '';
-//     el.style.zIndex = '';
-//     el.style.left = '';
-//     el.style.top = '';
-//     el.classList.remove('move');
-//   }
-// }
 
 function clearAbsolute() {
   moveTarget.style.position = '';
