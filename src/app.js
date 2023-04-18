@@ -112,9 +112,7 @@ const render = (type) => {
 
 const createTodo = (e) => {
   const item = new TodoItem(itemId++, e.target.value, new Date().getTime());
-  progressArray.length > 0
-    ? progressArray.unshift(item)
-    : progressArray.push(item);
+  progressArray.push(item);
   e.target.value = '';
   render();
   return item;
